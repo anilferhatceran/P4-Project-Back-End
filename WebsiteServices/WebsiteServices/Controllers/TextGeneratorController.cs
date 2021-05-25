@@ -39,7 +39,7 @@ namespace WebsiteServices.Controllers
 
        // GET: api/<TextGeneratorController>
         [HttpGet("words/{Amount}")]
-        public IEnumerable<TextGenerator> GetWords(int amount)
+        public ActionResult<string> GetWords(int amount)
         {
             List<TextGenerator> allWords = dataContext.TextsGenerated.ToList();
             List<TextGenerator> words = new List<TextGenerator>();
@@ -50,7 +50,7 @@ namespace WebsiteServices.Controllers
                 words.Add(allWords[num]);
             }
 
-            return words;   
+            return Ok(new { words = string.Join(" ", words.Select(word => word.word))  });   
             
         }
 
