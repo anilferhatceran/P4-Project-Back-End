@@ -43,7 +43,7 @@ namespace WebsiteServices.Controllers
         {
             List<User> userList = dataContext.Users.ToList();
             var userByEmail = userList.Where(user => user.userEmail == useremail);
-
+            
             return userByEmail;
         }
 

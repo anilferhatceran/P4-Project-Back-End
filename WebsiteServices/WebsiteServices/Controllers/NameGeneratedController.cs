@@ -50,28 +50,39 @@ namespace WebsiteServices.Controllers
             await dataContext.SaveChangesAsync();
             return Ok();
         }
-        //[HttpGet("maleNames/{Amount}")]
-        //public IEnumerable<NameGenerated> GetMaleNames(int amount)
-        //{
-        //    List<NameGenerated> allNames = dataContext.NamesGenerated.ToList();
-        //    List<TextGenerator> maleNames = new List<TextGenerator>();
-        //    Random rand = new Random();
-        //    for (int i = 0; i < amount; i++)
-        //    {
-        //        int num = rand.Next(0, allWords.Count - 1);
-        //        words.Add(allWords[num]);
-        //    }
+        // GET: api/<TextGeneratorController>
+        [HttpGet("MaleNames/{Amount}")]
+        public ActionResult<string> getMaleName(int amount)
+        {
+            List<NameGenerated> allNames = dataContext.NamesGenerated.ToList();
+            List<NameGenerated> maleNames = new List<NameGenerated>();
+            Random rand = new Random();
+            for (int i = 0; i < amount; i++)
+            {
+                int num = rand.Next(0, allNames.Count - 1);
+                maleNames.Add(allNames[num]);
+            }
 
-        //    return words;
+            return Ok(new { maleNames = string.Join(" ", maleNames.Select(maleName => maleName.maleNames)) });
 
-        //}
+        }
         [HttpGet("{id}")]
         public string Get(int id)
         {
+
             return "value";
+        }
+        [HttpGet("maleName")]
+        public string GetMaleName()
+        {
+            Random rand = new Random();
+            int toSkip = rand.Next(0, dataContext.NamesGenerated.Where(name => name.maleNames != null).Count());
+            return dataContext.NamesGenerated.Where(name => name.maleNames != null).Skip(toSkip).Take(1).First().maleNames;
+            
         }
 
         // POST api/<NameGeneratedController>
+
         [HttpPost]
         public void Post([FromBody] string value)
         {
