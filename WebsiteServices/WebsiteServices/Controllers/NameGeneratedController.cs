@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,22 +51,57 @@ namespace WebsiteServices.Controllers
             await dataContext.SaveChangesAsync();
             return Ok();
         }
-        // GET: api/<TextGeneratorController>
-        [HttpGet("MaleNames/{Amount}")]
-        public ActionResult<string> getMaleName(int amount)
+        //[HttpGet("MaleNames/{Amount}")]
+        //public ActionResult<string> getMaleName(int amount)
+        //{
+        //    List<NameGenerated> allNames = dataContext.NamesGenerated.ToList();
+        //    //List<NameGenerated> maleNames = new List<NameGenerated>();
+
+        //    //Random rand = new Random();
+        //    //for (int i = 0; i < amount; i++)
+        //    //{
+        //    //    int num = rand.Next(0, allNames.Count - 1);
+        //    //    maleNames.Add(allNames[num]);
+        //    //}
+
+        //    var maleNames = allNames.Where(maleNames => maleNames.maleNames.Length > 1);
+        //    return maleNames;
+        //    //return Ok(new { maleNames = string.Join(" ", maleNames.Select(maleName => maleName.maleNames)) });
+
+        //}
+
+        [HttpGet("malenames/{amount}")]
+        public async Task<List<string>> GetMaleNames(int amount)
         {
-            List<NameGenerated> allNames = dataContext.NamesGenerated.ToList();
-            List<NameGenerated> maleNames = new List<NameGenerated>();
+            List<NameGenerated> allNames = await dataContext.NamesGenerated.Where(name => name.maleNames != null).ToListAsync();
+            List<string> maleNames = new List<string>();
+
             Random rand = new Random();
             for (int i = 0; i < amount; i++)
             {
                 int num = rand.Next(0, allNames.Count - 1);
-                maleNames.Add(allNames[num]);
+                maleNames.Add(allNames[num].maleNames);
             }
 
-            return Ok(new { maleNames = string.Join(" ", maleNames.Select(maleName => maleName.maleNames)) });
-
+            return maleNames;
         }
+
+        [HttpGet("femalenames/{amount}")]
+        public async Task<List<string>> GetFemaleNames(int amount)
+        {
+            List<NameGenerated> allNames = await dataContext.NamesGenerated.Where(name => name.femaleNames != null).ToListAsync();
+            List<string> femaleNames = new List<string>();
+
+            Random rand = new Random();
+            for (int i = 0; i < amount; i++)
+            {
+                int num = rand.Next(0, allNames.Count - 1);
+                femaleNames.Add(allNames[num].femaleNames);
+            }
+
+            return femaleNames;
+        }
+
         [HttpGet("{id}")]
         public string Get(int id)
         {
