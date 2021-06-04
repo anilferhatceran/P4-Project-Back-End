@@ -22,7 +22,6 @@ namespace WebsiteServices.Controllers
             dataContext = dataContextObj;
         }
 
-        
         [HttpGet("addMaleNames")]
         public async Task<IActionResult> GenerateMaleNames()
         {
@@ -118,11 +117,7 @@ namespace WebsiteServices.Controllers
         }
 
         // POST api/<NameGeneratedController>
-
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+       
 
         // PUT api/<NameGeneratedController>/5
         [HttpPut("{id}")]

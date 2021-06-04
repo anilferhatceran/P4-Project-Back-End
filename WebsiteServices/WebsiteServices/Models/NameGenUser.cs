@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace WebsiteServices.Models
 {
-    public class User
+    public class NameGenUser
     {
         [Key]
-        public int userID { get; set; }
-        public string userEmail { get; set; }
-        public string passwordHash { get; set; }
-
+        public int nameGenUserID { get; set; }
+        public int nameGenID { get; set; }
+        public User user { get; set; }
     }
 }

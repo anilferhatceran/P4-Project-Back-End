@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WebsiteServices.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -46,6 +48,14 @@ namespace WebsiteServices.Controllers
             
             return userByEmail;
         }
+        [HttpPost("login")]
+        public ActionResult<User> ValidateUser(User user)
+        {
+            var userObj = dataContext.Users.FirstOrDefault(u => u.userEmail == user.userEmail && u.passwordHash == user.passwordHash);
+            return userObj;
+        }
+
+       
 
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)

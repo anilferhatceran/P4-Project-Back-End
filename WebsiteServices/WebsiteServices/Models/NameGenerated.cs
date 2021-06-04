@@ -10,10 +10,8 @@ namespace WebsiteServices.Models
     {
         [Key]
         public int nameGenID { get; set; }
-        public string generatedName { get; set; }
         public string maleNames { get; set; }
         public string femaleNames { get; set; }
-        public User user{ get; set; }
 
     }
 }
