@@ -19,6 +19,24 @@ namespace WebsiteServices.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("WebsiteServices.Models.CompanyProfile", b =>
+                {
+                    b.Property<int>("companyID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("companyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("companyURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("companyID");
+
+                    b.ToTable("CompanyProfiles");
+                });
+
             modelBuilder.Entity("WebsiteServices.Models.NameGenUser", b =>
                 {
                     b.Property<int>("nameGenUserID")
@@ -57,6 +75,40 @@ namespace WebsiteServices.Migrations
                     b.HasKey("nameGenID");
 
                     b.ToTable("NamesGenerated");
+                });
+
+            modelBuilder.Entity("WebsiteServices.Models.ReviewDetail", b =>
+                {
+                    b.Property<int>("reviewID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("companyID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("reviewDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("reviewRating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("reviewText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("reviewTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("userID")
+                        .HasColumnType("int");
+
+                    b.HasKey("reviewID");
+
+                    b.HasIndex("companyID");
+
+                    b.HasIndex("userID");
+
+                    b.ToTable("ReviewDetails");
                 });
 
             modelBuilder.Entity("WebsiteServices.Models.TextGenerator", b =>
@@ -118,6 +170,17 @@ namespace WebsiteServices.Migrations
                     b.HasOne("WebsiteServices.Models.NameGenerated", "name")
                         .WithMany()
                         .HasForeignKey("nameGenID");
+
+                    b.HasOne("WebsiteServices.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userID");
+                });
+
+            modelBuilder.Entity("WebsiteServices.Models.ReviewDetail", b =>
+                {
+                    b.HasOne("WebsiteServices.Models.CompanyProfile", "company")
+                        .WithMany()
+                        .HasForeignKey("companyID");
 
                     b.HasOne("WebsiteServices.Models.User", "user")
                         .WithMany()

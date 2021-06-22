@@ -2,10 +2,24 @@
 
 namespace WebsiteServices.Migrations
 {
-    public partial class InitialCreation : Migration
+    public partial class initialcreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "CompanyProfiles",
+                columns: table => new
+                {
+                    companyID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    companyName = table.Column<string>(nullable: true),
+                    companyURL = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyProfiles", x => x.companyID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "NamesGenerated",
                 columns: table => new
@@ -88,6 +102,36 @@ namespace WebsiteServices.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ReviewDetails",
+                columns: table => new
+                {
+                    reviewID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    companyID = table.Column<int>(nullable: true),
+                    userID = table.Column<int>(nullable: true),
+                    reviewTitle = table.Column<string>(nullable: true),
+                    reviewText = table.Column<string>(nullable: true),
+                    reviewDate = table.Column<string>(nullable: true),
+                    reviewRating = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReviewDetails", x => x.reviewID);
+                    table.ForeignKey(
+                        name: "FK_ReviewDetails_CompanyProfiles_companyID",
+                        column: x => x.companyID,
+                        principalTable: "CompanyProfiles",
+                        principalColumn: "companyID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ReviewDetails_Users_userID",
+                        column: x => x.userID,
+                        principalTable: "Users",
+                        principalColumn: "userID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_NameGenUsers_nameGenID",
                 table: "NameGenUsers",
@@ -97,12 +141,25 @@ namespace WebsiteServices.Migrations
                 name: "IX_NameGenUsers_userID",
                 table: "NameGenUsers",
                 column: "userID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewDetails_companyID",
+                table: "ReviewDetails",
+                column: "companyID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewDetails_userID",
+                table: "ReviewDetails",
+                column: "userID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "NameGenUsers");
+
+            migrationBuilder.DropTable(
+                name: "ReviewDetails");
 
             migrationBuilder.DropTable(
                 name: "TextsGenerated");
@@ -112,6 +169,9 @@ namespace WebsiteServices.Migrations
 
             migrationBuilder.DropTable(
                 name: "NamesGenerated");
+
+            migrationBuilder.DropTable(
+                name: "CompanyProfiles");
 
             migrationBuilder.DropTable(
                 name: "Users");
