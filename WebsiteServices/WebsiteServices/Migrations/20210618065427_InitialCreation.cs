@@ -61,18 +61,57 @@ namespace WebsiteServices.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.userID);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "NameGenUsers",
+                columns: table => new
+                {
+                    nameGenUserID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nameGenID = table.Column<int>(nullable: true),
+                    userID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NameGenUsers", x => x.nameGenUserID);
+                    table.ForeignKey(
+                        name: "FK_NameGenUsers_NamesGenerated_nameGenID",
+                        column: x => x.nameGenID,
+                        principalTable: "NamesGenerated",
+                        principalColumn: "nameGenID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_NameGenUsers_Users_userID",
+                        column: x => x.userID,
+                        principalTable: "Users",
+                        principalColumn: "userID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NameGenUsers_nameGenID",
+                table: "NameGenUsers",
+                column: "nameGenID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NameGenUsers_userID",
+                table: "NameGenUsers",
+                column: "userID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "NamesGenerated");
+                name: "NameGenUsers");
 
             migrationBuilder.DropTable(
                 name: "TextsGenerated");
 
             migrationBuilder.DropTable(
                 name: "TypingSessions");
+
+            migrationBuilder.DropTable(
+                name: "NamesGenerated");
 
             migrationBuilder.DropTable(
                 name: "Users");

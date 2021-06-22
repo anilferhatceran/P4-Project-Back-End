@@ -50,24 +50,6 @@ namespace WebsiteServices.Controllers
             await dataContext.SaveChangesAsync();
             return Ok();
         }
-        //[HttpGet("MaleNames/{Amount}")]
-        //public ActionResult<string> getMaleName(int amount)
-        //{
-        //    List<NameGenerated> allNames = dataContext.NamesGenerated.ToList();
-        //    //List<NameGenerated> maleNames = new List<NameGenerated>();
-
-        //    //Random rand = new Random();
-        //    //for (int i = 0; i < amount; i++)
-        //    //{
-        //    //    int num = rand.Next(0, allNames.Count - 1);
-        //    //    maleNames.Add(allNames[num]);
-        //    //}
-
-        //    var maleNames = allNames.Where(maleNames => maleNames.maleNames.Length > 1);
-        //    return maleNames;
-        //    //return Ok(new { maleNames = string.Join(" ", maleNames.Select(maleName => maleName.maleNames)) });
-
-        //}
 
         [HttpGet("malenames/{amount}")]
         public async Task<List<string>> GetMaleNames(int amount)
@@ -101,12 +83,8 @@ namespace WebsiteServices.Controllers
             return femaleNames;
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
+       
 
-            return "value";
-        }
         [HttpGet("maleName")]
         public string GetMaleName()
         {

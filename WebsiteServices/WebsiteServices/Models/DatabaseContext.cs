@@ -16,6 +16,7 @@ namespace WebsiteServices.Models
         public DbSet<NameGenerated> NamesGenerated { get; set; }
         public DbSet<TypingSession> TypingSessions { get; set; }
         public DbSet<TextGenerator> TextsGenerated { get; set; }
+        public DbSet<NameGenUser> NameGenUsers { get; set; }
         public DbSet<ReviewDetail> ReviewDetails { get; set; }
         public DbSet<CompanyProfile> CompanyProfiles { get; set; }
     }
