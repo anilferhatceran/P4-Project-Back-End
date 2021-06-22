@@ -10,7 +10,7 @@ namespace WebsiteServices.Models
     {
         [Key]
         public int nameGenUserID { get; set; }
-        public int nameGenID { get; set; }
+        public NameGenerated name { get; set; }
         public User user { get; set; }
     }
 }
