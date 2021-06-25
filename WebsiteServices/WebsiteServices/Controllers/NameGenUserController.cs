@@ -37,7 +37,7 @@ namespace WebsiteServices.Controllers
             List<User> userList = dataContext.Users.ToList();
             List<NameGenUser> nameGenUserList = dataContext.NameGenUsers.ToList();
 
-            var lastTen = nameGenUserList.OrderByDescending(u => u.user.userID == userID);
+            var lastTen = nameGenUserList.Where(u => u.user.userID == userID).Reverse().Take(10);
            
 
             return lastTen;
