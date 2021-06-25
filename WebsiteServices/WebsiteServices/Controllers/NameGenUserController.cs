@@ -47,7 +47,12 @@ namespace WebsiteServices.Controllers
         [HttpPost]
         public async Task<ActionResult<NameGenUser>> PostNameGenUser(NameGenUser nameGenUser)
         {
-            nameGenUser.name = dataContext.NamesGenerated.Where(name => name.maleNames == nameGenUser.name.maleNames ||  name.femaleNames == nameGenUser.name.femaleNames).FirstOrDefault();
+            if(nameGenUser.name.maleNames == "" && nameGenUser.name.femaleNames == "")
+            {
+                return BadRequest();
+            }
+            
+            nameGenUser.name = dataContext.NamesGenerated.Where(name => name.maleNames == nameGenUser.name.maleNames || name.femaleNames == nameGenUser.name.femaleNames).FirstOrDefault();
 
             nameGenUser.user = dataContext.Users.Where(user => user.userID == nameGenUser.user.userID).FirstOrDefault();
 
@@ -56,6 +61,8 @@ namespace WebsiteServices.Controllers
 
 
             return nameGenUser;
+            
+           
         }
             
         // PUT api/<NameGenUserController>/5

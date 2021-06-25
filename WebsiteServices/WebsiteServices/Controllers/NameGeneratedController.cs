@@ -94,8 +94,16 @@ namespace WebsiteServices.Controllers
             
         }
 
+        [HttpGet("femaleName")]
+        public string GetFemaleName()
+        {
+            Random rand = new Random();
+            int toSkip = rand.Next(0, dataContext.NamesGenerated.Where(name => name.femaleNames != null).Count());
+            return dataContext.NamesGenerated.Where(name => name.femaleNames != null).Skip(toSkip).Take(1).First().femaleNames;
+
+        }
         // POST api/<NameGeneratedController>
-       
+
 
         // PUT api/<NameGeneratedController>/5
         [HttpPut("{id}")]

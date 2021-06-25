@@ -52,12 +52,21 @@ namespace WebsiteServices.Controllers
             List<User> userList = dataContext.Users.ToList();
 
             List<ReviewDetail> reviewsList = dataContext.ReviewDetails.ToList();
+            
             var companyByUrl = reviewsList.Where(reviewTotal => reviewTotal.company.companyURL == url).Select(totalReviewRating => totalReviewRating.reviewRating);
 
-            int ratingSum = companyByUrl.Sum();
-            int avrgRating = ratingSum / companyByUrl.Count();
+            int avrgRating;
+            
 
-            return avrgRating;              
+            if (companyByUrl.Count() > 0)
+            {
+                int ratingSum = companyByUrl.Sum();
+                avrgRating = ratingSum / companyByUrl.Count();
+                return avrgRating;
+            }
+
+            return avrgRating = 0;
+                         
         }
 
         [HttpGet("totalratings")]
