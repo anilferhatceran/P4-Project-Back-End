@@ -21,9 +21,11 @@ namespace WebsiteServices.Controllers
         }
         // GET: api/<CompanyProfileController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<CompanyProfile> GetCompanyProfiles()
         {
-            return new string[] { "value1", "value2" };
+            List<CompanyProfile> companyList = dataContext.CompanyProfiles.ToList();
+
+            return companyList;
         }
 
         // GET api/<CompanyProfileController>/5
@@ -35,8 +37,11 @@ namespace WebsiteServices.Controllers
 
         // POST api/<CompanyProfileController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CompanyProfile>> PostCompany(CompanyProfile company)
         {
+            dataContext.CompanyProfiles.Add(company);
+            await dataContext.SaveChangesAsync();
+            return company;
         }
 
         // PUT api/<CompanyProfileController>/5

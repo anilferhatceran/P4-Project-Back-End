@@ -10,6 +10,7 @@ namespace WebsiteServices.Models
     {
         [Key]
         public int reviewID { get; set; }
+        [Required]
         public CompanyProfile company { get; set; }
         public User user { get; set; }
         public string reviewTitle { get; set; }

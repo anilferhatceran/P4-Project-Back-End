@@ -19,6 +19,7 @@ namespace WebsiteServices.Controllers
         {
             dataContext = dataContextObj;
         }
+
         // GET: api/<ReviewDetailController>
         [HttpGet]
         public IEnumerable<ReviewDetail> GetReviews()
@@ -37,9 +38,8 @@ namespace WebsiteServices.Controllers
             List<CompanyProfile> companyProfilesList = dataContext.CompanyProfiles.ToList();
 
             List<User> userList = dataContext.Users.ToList();
-
-            List<ReviewDetail> reviewsList = dataContext.ReviewDetails.ToList();
-            var companyByUrl = reviewsList.Where(webUrl => webUrl.company.companyURL == url);
+     
+            var companyByUrl = dataContext.ReviewDetails.Where(webUrl => webUrl.company.companyURL == url);
             return companyByUrl;
 
         }
@@ -51,9 +51,9 @@ namespace WebsiteServices.Controllers
 
             List<User> userList = dataContext.Users.ToList();
 
-            List<ReviewDetail> reviewsList = dataContext.ReviewDetails.ToList();
+           
             
-            var companyByUrl = reviewsList.Where(reviewTotal => reviewTotal.company.companyURL == url).Select(totalReviewRating => totalReviewRating.reviewRating);
+            var companyByUrl = dataContext.ReviewDetails.Where(reviewTotal => reviewTotal.company.companyURL == url).Select(totalReviewRating => totalReviewRating.reviewRating);
 
             int avrgRating;
             
@@ -76,8 +76,7 @@ namespace WebsiteServices.Controllers
 
             List<User> userList = dataContext.Users.ToList();
 
-            List<ReviewDetail> reviewsList = dataContext.ReviewDetails.ToList();
-            var companyByUrl = reviewsList.Where(reviewTotal => reviewTotal.company.companyURL == url).Select(totalReviewRating => totalReviewRating.reviewRating);
+            var companyByUrl = dataContext.ReviewDetails.Where(reviewTotal => reviewTotal.company.companyURL == url).Select(totalReviewRating => totalReviewRating.reviewRating);
 
             int totalRatings = companyByUrl.Count();
 
@@ -90,9 +89,36 @@ namespace WebsiteServices.Controllers
 
         // POST api/<ReviewDetailController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<ReviewDetail>> PostReviw(ReviewDetail reviewDetail)
         {
+
+            
+            var companyCheck = dataContext.CompanyProfiles.Where(company => company.companyURL == reviewDetail.company.companyURL
+            && company.companyName == reviewDetail.company.companyName).FirstOrDefault();
+
+            if(companyCheck != null)
+            {
+                reviewDetail.company = companyCheck;
+            }
+            else
+            {
+                dataContext.CompanyProfiles.Add(reviewDetail.company);
+            }
+            dataContext.ReviewDetails.Attach(reviewDetail);
+            await dataContext.SaveChangesAsync();
+
+
+            return reviewDetail;
+
+
         }
+        //[HttpPost]
+        //public async Task<ActionResult<ReviewDetail>> PostCompany(CompanyProfile company)
+        //{
+        //    dataContext.CompanyProfiles.Add(company);
+        //    await dataContext.SaveChangesAsync();
+        //    return company;
+        //}
 
         // PUT api/<ReviewDetailController>/5
         [HttpPut("{id}")]
