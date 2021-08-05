@@ -37,6 +37,9 @@ namespace WebsiteServices.Controllers
             List<User> userList = dataContext.Users.ToList();
             List<NameGenUser> nameGenUserList = dataContext.NameGenUsers.ToList();
 
+            //Filters through a list of NameGenUser model and then finds all user entries
+            //according to the user logged in. Then that list is reversed in order to get the newest entries.
+            //To finish it of, the 10 newest entries are returned.
             var lastTen = nameGenUserList.Where(u => u.user.userID == userID).Reverse().Take(10);
            
 
@@ -47,13 +50,17 @@ namespace WebsiteServices.Controllers
         [HttpPost]
         public async Task<ActionResult<NameGenUser>> PostNameGenUser(NameGenUser nameGenUser)
         {
+            //This ensures that the user cannot save a name without clicking the generate method.
+            //In othe words, the user cannot save "nothing".
             if(nameGenUser.name.maleNames == "" && nameGenUser.name.femaleNames == "")
             {
                 return BadRequest();
             }
             
+            //adds the saved name into the nameGenUser.name column
             nameGenUser.name = dataContext.NamesGenerated.Where(name => name.maleNames == nameGenUser.name.maleNames || name.femaleNames == nameGenUser.name.femaleNames).FirstOrDefault();
 
+            //adds the userID of the user that saved the name, into the nameGenuser. user column.
             nameGenUser.user = dataContext.Users.Where(user => user.userID == nameGenUser.user.userID).FirstOrDefault();
 
             dataContext.NameGenUsers.Add(nameGenUser);

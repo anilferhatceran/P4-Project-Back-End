@@ -25,10 +25,16 @@ namespace WebsiteServices.Controllers
         [HttpGet("addWords")]
         public async Task<IActionResult> GenerateWordsList()
         {
+            //reads all lines in the file specified and then adds each line to the lines array. This will only get executed once, so the specified path
+            //of the file is not that important.
             string[] lines = System.IO.File.ReadAllLines(@"C:\Users\anil\Downloads\english-words-master\english-words-master\words.txt");
+
             List<TextGenerator> items = new List<TextGenerator>();
             foreach (var item in lines)
             {
+                //For each item(word) there is in the new array, an entry will be added to a list
+                //However, before an item gets added to the list, we make sure that the added item is an object of our TextGenerator model.
+                //In this case each item is equivalent to a word.
                 items.Add(new TextGenerator() { word = item });
             }
 
@@ -41,6 +47,9 @@ namespace WebsiteServices.Controllers
         [HttpGet("words/{Amount}")]
         public ActionResult<string> GetWords(int amount)
         {
+            //Refer to NameGeneratedController for the explanation of this code.
+
+
             List<TextGenerator> allWords = dataContext.TextsGenerated.ToList();
             List<TextGenerator> words = new List<TextGenerator>();
             Random rand = new Random();

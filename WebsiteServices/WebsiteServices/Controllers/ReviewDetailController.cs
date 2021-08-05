@@ -52,14 +52,15 @@ namespace WebsiteServices.Controllers
             List<User> userList = dataContext.Users.ToList();
 
            
-            
+            //Finds all the reviews given to the company by matchig the companyURL with the user-input url given on the front end.
             var companyByUrl = dataContext.ReviewDetails.Where(reviewTotal => reviewTotal.company.companyURL == url).Select(totalReviewRating => totalReviewRating.reviewRating);
 
             int avrgRating;
             
-
+            //If the company has more than 0 reviews, this if is executed
             if (companyByUrl.Count() > 0)
             {
+                //get the sum of all the reviews given and then divide that number by the amount of reviews given.
                 int ratingSum = companyByUrl.Sum();
                 avrgRating = ratingSum / companyByUrl.Count();
                 return avrgRating;
@@ -89,10 +90,12 @@ namespace WebsiteServices.Controllers
 
         // POST api/<ReviewDetailController>
         [HttpPost]
-        public async Task<ActionResult<ReviewDetail>> PostReviw(ReviewDetail reviewDetail)
+        public async Task<ActionResult<ReviewDetail>> PostReview(ReviewDetail reviewDetail)
         {
 
-            
+            //this checks whether the companyName and companyURL exist in the ReviewDetail model.
+            //If they do exist, it means that the company has reviews attached to it
+            //if not, then the company gets added to the reviewDetail model, which means the first review is ready to get posted.
             var companyCheck = dataContext.CompanyProfiles.Where(company => company.companyURL == reviewDetail.company.companyURL
             && company.companyName == reviewDetail.company.companyName).FirstOrDefault();
 
@@ -132,22 +135,4 @@ namespace WebsiteServices.Controllers
         {
         }
     }
-}
-
-class List
-{
-    List (int size)
-    {
-        firstElement = new Element();
-        for (int i = 0; i < size; i++)
-        {
-            firstElement.next = new Element();
-        }
-    }
-    Element firstElement;
-}
-
-class Element
-{
-    public Element next;
 }
